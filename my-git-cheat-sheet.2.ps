@@ -1,0 +1,816 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 36 36 576 756
+%%Title: Enscript Output
+%%For: Darren Embry
+%%Creator: GNU Enscript 1.6.5.2
+%%CreationDate: Wed Mar  4 13:55:27 2015
+%%Orientation: Portrait
+%%Pages: (atend)
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6.5 2
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6.5 2
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Courier
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier /F-gs-font MF
+/F-gs-font 10 10 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [612 792] 
+  >> setpagedevice
+} if
+/d_page_w 540 def
+/d_page_h 720 def
+/d_header_x 0 def
+/d_header_y 720 def
+/d_header_w 540 def
+/d_header_h 0 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 540 def
+/d_footer_h 0 def
+/d_output_w 540 def
+/d_output_h 720 def
+/cols 1 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+36 36 translate
+/pagenum 1 def
+/fname (my-git-cheat-sheet.2.txt) def
+/fdir (.) def
+/ftail (my-git-cheat-sheet.2.txt) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+5 707 M
+(clean) s
+5 685 M
+(        Cleans the working tree by recursively removing files that are not) s
+5 674 M
+(        under version control, starting from the current directory.) s
+5 652 M
+(status) s
+5 630 M
+(        Displays paths that have differences between the index file and the) s
+5 619 M
+(        current HEAD commit, paths that have differences between the) s
+5 608 M
+(        workspace and the index file, and paths in the workspace that are) s
+5 597 M
+(        not tracked by git.) s
+5 575 M
+(diff) s
+5 553 M
+(        Displays the differences not added to the index.) s
+5 531 M
+(add <file... or dir...>) s
+5 509 M
+(        Adds the current content of new or modified files to the index,) s
+5 498 M
+(        thus staging that content for inclusion in the next commit. Use) s
+5 487 M
+(        `add --interactive` to add the modified contents in the workspace) s
+5 476 M
+(        interactively to the index.) s
+5 454 M
+(add -u) s
+5 432 M
+(        Adds the current content of modified \(NOT NEW\) files to the index. ) s
+5 421 M
+(        This is similar to what 'git commit -a' does in preparation for) s
+5 410 M
+(        making a commit.) s
+5 388 M
+(rm <file\(s\)...>) s
+5 366 M
+(        Remove a file from the workspace and the index.) s
+5 344 M
+(mv <file\(s\)...>) s
+5 322 M
+(        Move file in the workspace and the index.) s
+5 300 M
+(checkout <files\(s\)... or dir>) s
+5 278 M
+(        Updates the file or directory in the workspace. Does NOT switch) s
+5 267 M
+(        branches.) s
+5 245 M
+(diff <commit or branch>) s
+5 223 M
+(        View the changes you have in your workspace relative to the named) s
+5 212 M
+(        <commit>. You can use HEAD to compare it with the latest commit, or) s
+5 201 M
+(        a branch name to compare with the tip of a different branch) s
+5 179 M
+(commit -a [-m 'msg']) s
+5 157 M
+(        Commit all files changed since your last commit, except untracked) s
+5 146 M
+(        files \(ie. all files that are already listed in the index\). Remove) s
+5 135 M
+(        files in the index that have been removed from the workspace.) s
+5 113 M
+(reset --hard) s
+5 91 M
+(        Matches the workspace and index to the local tree. WARNING: Any) s
+5 80 M
+(        changes to tracked files in the working tree since commit are lost.) s
+5 69 M
+(        Use this if merging has resulted in conflicts and you'd like to) s
+5 58 M
+(        start over. Pass ORIG_HEAD to undo the most recent successful merge) s
+5 47 M
+(        and any changes after.) s
+5 25 M
+(checkout <branch>) s
+5 3 M
+(        Switches branches by updating the index and workspace to reflect) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+36 36 translate
+/pagenum 2 def
+/fname (my-git-cheat-sheet.2.txt) def
+/fdir (.) def
+/ftail (my-git-cheat-sheet.2.txt) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+5 707 M
+(        the specified branch, <branch>, and updating HEAD to be <branch>.) s
+5 685 M
+(checkout -b <name of new branch>) s
+5 663 M
+(        Create a branch and switch to it) s
+5 641 M
+(merge <commit or branch>) s
+5 619 M
+(        Merge changes from <branch name> into current branch.) s
+5 608 M
+(        ) s
+5 597 M
+(        Use `--no-commit` to leave changes uncommitted.) s
+5 575 M
+(rebase <upstream>) s
+5 553 M
+(        Reverts all commits since the current branch diverged from) s
+5 542 M
+(        <upstream>, and then re-applies them one-by-one on top of changes) s
+5 531 M
+(        from the HEAD of <upstream>.) s
+5 509 M
+(cherry-pick <commit>) s
+5 487 M
+(        Integrate changes in the given commit into the current branch.) s
+5 465 M
+(revert <commit>) s
+5 443 M
+(        Reverse commit specified by <commit> and commit the result. This) s
+5 432 M
+(        requires your working tree to be clean \(no modifications from the) s
+5 421 M
+(        HEAD commit\).) s
+5 399 M
+(reset HEAD <file\(s\)...>) s
+5 377 M
+(        Remove the specified files from the next commit. Resets the index) s
+5 366 M
+(        but not the working tree \(i.e., the changed files are preserved but) s
+5 355 M
+(        not marked for commit\) and reports what has not been updated.) s
+5 333 M
+(reset --soft HEAD^) s
+5 311 M
+(        Undo the last commit, leaving changes in the the index.) s
+5 289 M
+(diff --cached [<commit>]) s
+5 267 M
+(        View the changes you staged vs the latest commit. Can pass a) s
+5 256 M
+(        <commit> to see changes relative to it.) s
+5 234 M
+(commit [-m 'msg']) s
+5 212 M
+(        Stores the current contents of the index in a new commit along with) s
+5 201 M
+(        a log message from the user describing the changes.) s
+5 179 M
+(commit --amend) s
+5 157 M
+(        Modify the last commit with the current index changes.) s
+5 135 M
+(log) s
+5 113 M
+(        Show recent commits, most recent on top. Options:) s
+5 102 M
+(        ) s
+5 91 M
+(        `--decorate` with branch and tag names on appropriate commits) s
+5 80 M
+(        ) s
+5 69 M
+(        `--stat` with stats \(files changed, insertions, and deletions\) ) s
+5 58 M
+(        ) s
+5 47 M
+(        `--author=<author>`  only by a certain author) s
+5 36 M
+(        ) s
+5 25 M
+(        `--after="MMM DD YYYY"` ex. \("Jun 20 2008"\) only commits after a) s
+5 14 M
+(        certain date) s
+5 3 M
+(        ) s
+_R
+S
+%%Page: (3) 3
+%%BeginPageSetup
+_S
+36 36 translate
+/pagenum 3 def
+/fname (my-git-cheat-sheet.2.txt) def
+/fdir (.) def
+/ftail (my-git-cheat-sheet.2.txt) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+5 707 M
+(        `--before="MMM DD YYYY"` only commits that occur before a certain) s
+5 696 M
+(        date ) s
+5 685 M
+(        ) s
+5 674 M
+(        `--merge` only the commits involved in the current merge conflicts) s
+5 652 M
+(diff <commit> <commit>) s
+5 630 M
+(        View the changes between two arbitrary commits) s
+5 608 M
+(branch) s
+5 586 M
+(        List all existing branches. Option -r causes the remote-tracking) s
+5 575 M
+(        branches to be listed, and option -a shows both.) s
+5 553 M
+(branch -d <branch>) s
+5 531 M
+(        Delete an specified branch. Use -D to force.) s
+_R
+S
+%%Page: (4) 4
+%%BeginPageSetup
+_S
+36 36 translate
+/pagenum 4 def
+/fname (my-git-cheat-sheet.2.txt) def
+/fdir (.) def
+/ftail (my-git-cheat-sheet.2.txt) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+5 707 M
+(stash list) s
+5 685 M
+(        List the stashes that you currently have.) s
+5 663 M
+(stash show [<stash>]) s
+5 641 M
+(        Show the changes recorded in the stash as a diff between the) s
+5 630 M
+(        stashed state and its original parent. When no <stash> is given,) s
+5 619 M
+(        shows the latest one.) s
+5 597 M
+(stash drop [<stash>]) s
+5 575 M
+(        Remove a single stashed state from the stash list. When no <stash>) s
+5 564 M
+(        is given, it removes the latest one.) s
+5 542 M
+(stash clear) s
+5 520 M
+(        Remove all the stashed states. Note that those states will then be) s
+5 509 M
+(        subject to pruning, and may be impossible to recover.) s
+5 487 M
+(stash save [<msg>]) s
+5 465 M
+(        Save your local modifications to a new stash, and run git reset) s
+5 454 M
+(        --hard to revert them. The <msg> part is optional and gives the) s
+5 443 M
+(        description along with the stashed state. For quickly making a) s
+5 432 M
+(        snapshot, you can omit both "save" and <msg>.) s
+5 410 M
+(stash apply [<stash>]) s
+5 388 M
+(        Move changes from the specified stash into the workspace. The) s
+5 377 M
+(        latest stash is the default.) s
+5 355 M
+(stash pop) s
+5 333 M
+(        Applies the changes from the last \(or specified\) stash and then) s
+5 322 M
+(        removes the given stash.) s
+5 300 M
+(stash branch <branchname> [<stash>]) s
+5 278 M
+(        Creates and checks out a new branch named <branchname> starting) s
+5 267 M
+(        from the commit at which the <stash> was originally created,) s
+5 256 M
+(        applies the changes recorded in <stash> to the new working tree and) s
+5 245 M
+(        index. ) s
+5 234 M
+(        ) s
+5 223 M
+(        If that succeeds, and <stash> is a reference of the form) s
+5 212 M
+(        stash@{<revision>}, it then drops the <stash>. When no <stash> is) s
+5 201 M
+(        given, applies the latest one. ) s
+5 190 M
+(        ) s
+5 179 M
+(        This is useful if the branch on which you ran git stash save has) s
+5 168 M
+(        changed enough that git stash apply fails due to conflicts. Since) s
+5 157 M
+(        the stash is applied on top of the commit that was HEAD at the time) s
+5 146 M
+(        git stash was run, it restores the originally stashed state with no) s
+5 135 M
+(        conflicts.) s
+_R
+S
+%%Page: (5) 5
+%%BeginPageSetup
+_S
+36 36 translate
+/pagenum 5 def
+/fname (my-git-cheat-sheet.2.txt) def
+/fdir (.) def
+/ftail (my-git-cheat-sheet.2.txt) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+5 707 M
+(clone <repo>) s
+5 685 M
+(        Download the repository specified by <repo> and checkout HEAD of) s
+5 674 M
+(        the master branch.) s
+5 652 M
+(pull <remote> <refspec>) s
+5 630 M
+(        Incorporates changes from a remote repository into the current) s
+5 619 M
+(        branch. In its default mode, `git pull` is shorthand for `git) s
+5 608 M
+(        fetch` followed by `git merge FETCH_HEAD`.) s
+5 586 M
+(reset --hard <remote>/<branch>) s
+5 564 M
+(        Reset local repo and working tree to match a remote branch. Use) s
+5 553 M
+(        `reset --hard origin/master` to throw away all commits to the local) s
+5 542 M
+(        master branch. Use this to start over on a failed merge.) s
+5 520 M
+(branch --track <new> <remote/branch>) s
+5 498 M
+(        Create a new local branch that tracks a remote branch.) s
+5 476 M
+(fetch <remote> <refspec>) s
+5 454 M
+(        Download objects and refs from another repository.) s
+5 432 M
+(push) s
+5 410 M
+(        update the server with your commits across all branches that are) s
+5 399 M
+(        *COMMON* between your local copy and the server.Local branches that) s
+5 388 M
+(        were never pushed to the server in the first place are not shared) s
+5 366 M
+(push <remote> <branch>) s
+5 344 M
+(        Push new \(or existing\) branch to remote repository) s
+5 322 M
+(push <remote> <branch>:<branch>) s
+5 300 M
+(        Push new branch to remote repository with a different name) s
+5 278 M
+(branch -r) s
+5 256 M
+(        List remote branches) s
+5 234 M
+(push <remote> :<branch>) s
+5 212 M
+(        Remove a remote branch. Literally "push nothing to this branch" ) s
+_R
+S
+%%Trailer
+%%Pages: 5
+%%DocumentNeededResources: font Courier-Bold Courier 
+%%EOF
