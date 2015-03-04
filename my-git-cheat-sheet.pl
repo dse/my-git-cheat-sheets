@@ -4,6 +4,7 @@ use strict;
 use open IO => ":locale";
 use JSON;
 use Text::Wrap;
+use HTML::Entities;
 
 my $commands = decode_json_file("commands.json");
 my $locations = decode_json_file("locations.json");
@@ -33,11 +34,17 @@ foreach my $command (@$commands) {
     if ($command->{left} eq "stash" ||
 	  $command->{right} eq "stash") {
 	$command->{is_stash} = 1;
+    } else {
+	$command->{is_stash} = 0;
     }
-    elsif ($command->{right} eq "remote_repo" ||
-	     $command->{left} eq "remote_repo") {
+    
+    if ($command->{right} eq "remote_repo" ||
+	  $command->{left} eq "remote_repo") {
 	$command->{is_remote_repo} = 1;
+    } else {
+	$command->{is_remote_repo} = 0;
     }
+	
     $command->{left_index} = $location_index_of->{$command->{left}};
     $command->{right_index} = $location_index_of->{$command->{right}};
 }
@@ -90,12 +97,30 @@ foreach my $command (@$commands) {
     }
 }
 
+foreach my $command (@$commands) {
+    my $left = $command->{left};
+    my $right = $command->{right};
+    my $direction = $command->{direction};
+    my $key = $command->{key};
+    my $tags = $command->{tags};
+
+    my $cmd  = $translations->{en}->{commands}->{$key}->{cmd};
+    my $docs = $translations->{en}->{commands}->{$key}->{docs};
+
+    $docs =~ s{\r}{\n\n}g;
+    $docs =~ s{&#8209;&#8209;}{--}g;
+    $docs = decode_entities($docs);
+
+    print("$cmd\n\n");
+    print(Text::Wrap::wrap("        ", "        ", $docs), "\n\n");
+    
+}
+
 sub decode_json_file {
     my ($filename) = @_;
     local $/;
     my $fh;
     open($fh, "<", $filename) or return;
-    warn("$filename\n");
     binmode($fh);
     my $json_text = <$fh>;
     return decode_json($json_text, { utf8 => 1,
