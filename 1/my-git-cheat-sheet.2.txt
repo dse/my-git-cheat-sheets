@@ -40,7 +40,7 @@ checkout <files(s)... or dir>
 	Updates the file or directory in the workspace. Does NOT switch
 	branches.
 
-diff <commit or branch>
+diff <commit or branch>
 
 	View the changes you have in your workspace relative to the named
 	<commit>. You can use HEAD to compare it with the latest commit, or
@@ -91,7 +91,7 @@ revert <commit>
 	requires your working tree to be clean (no modifications from the
 	HEAD commit).
 
-reset HEAD <file(s)...>
+reset HEAD <file(s)...>
 
 	Remove the specified files from the next commit. Resets the index
 	but not the working tree (i.e., the changed files are preserved but

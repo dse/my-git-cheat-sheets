@@ -3,7 +3,7 @@
 %%Title: Enscript Output
 %%For: Darren Embry
 %%Creator: GNU Enscript 1.6.5.2
-%%CreationDate: Wed Mar  4 13:55:27 2015
+%%CreationDate: Wed Mar  4 14:09:23 2015
 %%Orientation: Portrait
 %%Pages: (atend)
 %%DocumentMedia: Letter 612 792 0 () ()
@@ -486,38 +486,6 @@ _S
 (        Updates the file or directory in the workspace. Does NOT switch) s
 5 267 M
 (        branches.) s
-5 245 M
-(diff <commit or branch>) s
-5 223 M
-(        View the changes you have in your workspace relative to the named) s
-5 212 M
-(        <commit>. You can use HEAD to compare it with the latest commit, or) s
-5 201 M
-(        a branch name to compare with the tip of a different branch) s
-5 179 M
-(commit -a [-m 'msg']) s
-5 157 M
-(        Commit all files changed since your last commit, except untracked) s
-5 146 M
-(        files \(ie. all files that are already listed in the index\). Remove) s
-5 135 M
-(        files in the index that have been removed from the workspace.) s
-5 113 M
-(reset --hard) s
-5 91 M
-(        Matches the workspace and index to the local tree. WARNING: Any) s
-5 80 M
-(        changes to tracked files in the working tree since commit are lost.) s
-5 69 M
-(        Use this if merging has resulted in conflicts and you'd like to) s
-5 58 M
-(        start over. Pass ORIG_HEAD to undo the most recent successful merge) s
-5 47 M
-(        and any changes after.) s
-5 25 M
-(checkout <branch>) s
-5 3 M
-(        Switches branches by updating the index and workspace to reflect) s
 _R
 S
 %%Page: (2) 2
@@ -532,91 +500,71 @@ _S
 /user_footer_p false def
 %%EndPageSetup
 5 707 M
-(        the specified branch, <branch>, and updating HEAD to be <branch>.) s
+(diff <commit or branch>) s
 5 685 M
-(checkout -b <name of new branch>) s
+(        View the changes you have in your workspace relative to the named) s
+5 674 M
+(        <commit>. You can use HEAD to compare it with the latest commit, or) s
 5 663 M
-(        Create a branch and switch to it) s
+(        a branch name to compare with the tip of a different branch) s
 5 641 M
-(merge <commit or branch>) s
+(commit -a [-m 'msg']) s
 5 619 M
-(        Merge changes from <branch name> into current branch.) s
+(        Commit all files changed since your last commit, except untracked) s
 5 608 M
-(        ) s
+(        files \(ie. all files that are already listed in the index\). Remove) s
 5 597 M
-(        Use `--no-commit` to leave changes uncommitted.) s
+(        files in the index that have been removed from the workspace.) s
 5 575 M
-(rebase <upstream>) s
+(reset --hard) s
 5 553 M
-(        Reverts all commits since the current branch diverged from) s
+(        Matches the workspace and index to the local tree. WARNING: Any) s
 5 542 M
-(        <upstream>, and then re-applies them one-by-one on top of changes) s
+(        changes to tracked files in the working tree since commit are lost.) s
 5 531 M
-(        from the HEAD of <upstream>.) s
+(        Use this if merging has resulted in conflicts and you'd like to) s
+5 520 M
+(        start over. Pass ORIG_HEAD to undo the most recent successful merge) s
 5 509 M
-(cherry-pick <commit>) s
+(        and any changes after.) s
 5 487 M
-(        Integrate changes in the given commit into the current branch.) s
+(checkout <branch>) s
 5 465 M
-(revert <commit>) s
-5 443 M
-(        Reverse commit specified by <commit> and commit the result. This) s
+(        Switches branches by updating the index and workspace to reflect) s
+5 454 M
+(        the specified branch, <branch>, and updating HEAD to be <branch>.) s
 5 432 M
-(        requires your working tree to be clean \(no modifications from the) s
-5 421 M
-(        HEAD commit\).) s
-5 399 M
-(reset HEAD <file\(s\)...>) s
-5 377 M
-(        Remove the specified files from the next commit. Resets the index) s
+(checkout -b <name of new branch>) s
+5 410 M
+(        Create a branch and switch to it) s
+5 388 M
+(merge <commit or branch>) s
 5 366 M
-(        but not the working tree \(i.e., the changed files are preserved but) s
+(        Merge changes from <branch name> into current branch.) s
 5 355 M
-(        not marked for commit\) and reports what has not been updated.) s
-5 333 M
-(reset --soft HEAD^) s
-5 311 M
-(        Undo the last commit, leaving changes in the the index.) s
+(        ) s
+5 344 M
+(        Use `--no-commit` to leave changes uncommitted.) s
+5 322 M
+(rebase <upstream>) s
+5 300 M
+(        Reverts all commits since the current branch diverged from) s
 5 289 M
-(diff --cached [<commit>]) s
-5 267 M
-(        View the changes you staged vs the latest commit. Can pass a) s
+(        <upstream>, and then re-applies them one-by-one on top of changes) s
+5 278 M
+(        from the HEAD of <upstream>.) s
 5 256 M
-(        <commit> to see changes relative to it.) s
+(cherry-pick <commit>) s
 5 234 M
-(commit [-m 'msg']) s
+(        Integrate changes in the given commit into the current branch.) s
 5 212 M
-(        Stores the current contents of the index in a new commit along with) s
-5 201 M
-(        a log message from the user describing the changes.) s
+(revert <commit>) s
+5 190 M
+(        Reverse commit specified by <commit> and commit the result. This) s
 5 179 M
-(commit --amend) s
-5 157 M
-(        Modify the last commit with the current index changes.) s
-5 135 M
-(log) s
-5 113 M
-(        Show recent commits, most recent on top. Options:) s
-5 102 M
-(        ) s
-5 91 M
-(        `--decorate` with branch and tag names on appropriate commits) s
-5 80 M
-(        ) s
-5 69 M
-(        `--stat` with stats \(files changed, insertions, and deletions\) ) s
-5 58 M
-(        ) s
-5 47 M
-(        `--author=<author>`  only by a certain author) s
-5 36 M
-(        ) s
-5 25 M
-(        `--after="MMM DD YYYY"` ex. \("Jun 20 2008"\) only commits after a) s
-5 14 M
-(        certain date) s
-5 3 M
-(        ) s
+(        requires your working tree to be clean \(no modifications from the) s
+5 168 M
+(        HEAD commit\).) s
 _R
 S
 %%Page: (3) 3
@@ -631,26 +579,78 @@ _S
 /user_footer_p false def
 %%EndPageSetup
 5 707 M
-(        `--before="MMM DD YYYY"` only commits that occur before a certain) s
-5 696 M
-(        date ) s
+(reset HEAD <file\(s\)...>) s
 5 685 M
-(        ) s
+(        Remove the specified files from the next commit. Resets the index) s
 5 674 M
-(        `--merge` only the commits involved in the current merge conflicts) s
-5 652 M
-(diff <commit> <commit>) s
-5 630 M
-(        View the changes between two arbitrary commits) s
-5 608 M
-(branch) s
-5 586 M
-(        List all existing branches. Option -r causes the remote-tracking) s
+(        but not the working tree \(i.e., the changed files are preserved but) s
+5 663 M
+(        not marked for commit\) and reports what has not been updated.) s
+5 641 M
+(reset --soft HEAD^) s
+5 619 M
+(        Undo the last commit, leaving changes in the the index.) s
+5 597 M
+(diff --cached [<commit>]) s
 5 575 M
+(        View the changes you staged vs the latest commit. Can pass a) s
+5 564 M
+(        <commit> to see changes relative to it.) s
+5 542 M
+(commit [-m 'msg']) s
+5 520 M
+(        Stores the current contents of the index in a new commit along with) s
+5 509 M
+(        a log message from the user describing the changes.) s
+5 487 M
+(commit --amend) s
+5 465 M
+(        Modify the last commit with the current index changes.) s
+5 443 M
+(log) s
+5 421 M
+(        Show recent commits, most recent on top. Options:) s
+5 410 M
+(        ) s
+5 399 M
+(        `--decorate` with branch and tag names on appropriate commits) s
+5 388 M
+(        ) s
+5 377 M
+(        `--stat` with stats \(files changed, insertions, and deletions\) ) s
+5 366 M
+(        ) s
+5 355 M
+(        `--author=<author>`  only by a certain author) s
+5 344 M
+(        ) s
+5 333 M
+(        `--after="MMM DD YYYY"` ex. \("Jun 20 2008"\) only commits after a) s
+5 322 M
+(        certain date) s
+5 311 M
+(        ) s
+5 300 M
+(        `--before="MMM DD YYYY"` only commits that occur before a certain) s
+5 289 M
+(        date ) s
+5 278 M
+(        ) s
+5 267 M
+(        `--merge` only the commits involved in the current merge conflicts) s
+5 245 M
+(diff <commit> <commit>) s
+5 223 M
+(        View the changes between two arbitrary commits) s
+5 201 M
+(branch) s
+5 179 M
+(        List all existing branches. Option -r causes the remote-tracking) s
+5 168 M
 (        branches to be listed, and option -a shows both.) s
-5 553 M
+5 146 M
 (branch -d <branch>) s
-5 531 M
+5 124 M
 (        Delete an specified branch. Use -D to force.) s
 _R
 S
